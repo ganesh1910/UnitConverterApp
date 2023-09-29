@@ -1,11 +1,11 @@
-package com.gk.unitconverterapp.ui.theme
+package com.gk.unitconverterapp
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider.NewInstanceFactory
-import com.gk.unitconverterapp.ConversionViewModel
 import com.gk.unitconverterapp.data.ConverterRepository
+import javax.inject.Inject
 
-class ConversionViewModelFactory(
+class ConversionViewModelFactory @Inject constructor(
     private val repository: ConverterRepository
 ) : NewInstanceFactory() {
 

@@ -2,12 +2,15 @@ package com.gk.unitconverterapp.compose.converter
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.gk.unitconverterapp.data.Conversion
@@ -18,23 +21,36 @@ import java.text.DecimalFormat
 fun TopScreen(
     modifier: Modifier = Modifier,
     conversionOptions: List<Conversion>,
+    inputText: MutableState<String>,
+    selectedConversion: MutableState<Conversion?>,
+    typedValue: MutableState<String>,
+    isLandscape: Boolean,
     save: (Pair<String, String>) -> Unit
 ) {
-    Column(
-        modifier = modifier.fillMaxWidth()
-    ) {
-        val inputText: MutableState<String> = remember { mutableStateOf("") }
-        val selectedConversion: MutableState<Conversion?> = remember { mutableStateOf(null) }
-        val typedValue = remember { mutableStateOf("0.0") }
+    var isSave by remember { mutableStateOf(false) }
 
-        ConversionMenu(converterOptions = conversionOptions) {
+    val scrollState = rememberScrollState()
+
+    Column(
+        modifier = Modifier.verticalScroll(scrollState)
+    ) {
+
+        ConversionMenu(
+            converterOptions = conversionOptions,
+            isLandscape = isLandscape
+        ) {
             selectedConversion.value = it
             typedValue.value = "0.0"
         }
         Spacer(modifier = modifier.height(10.dp))
         selectedConversion.value?.let {
-            InputBox(conversion = it, inputText = inputText) { input ->
+            InputBox(
+                conversion = it,
+                inputText = inputText,
+                isLandscape = isLandscape,
+            ) { input ->
                 typedValue.value = input
+                isSave = true
             }
         }
 
@@ -51,7 +67,10 @@ fun TopScreen(
                 val message1 = "${typedValue.value} ${it.convertFrom} is equal to"
                 val message2 = "$roundedResult ${it.convertTo}"
                 ResultBlock(message1 = message1, message2 = message2)
-                save(Pair(message1,message2))
+                if (isSave) {
+                    save(Pair(message1, message2))
+                    isSave = false
+                }
             }
         }
 

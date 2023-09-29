@@ -37,57 +37,109 @@ fun InputBox(
     inputText: MutableState<String>,
     modifier: Modifier = Modifier,
     context: Context = LocalContext.current,
+    isLandscape: Boolean,
     calculate: (String) -> Unit
 ) {
-    Column(
-        modifier = modifier.padding(top = 20.dp)
-    ) {
-        Row(
-            modifier = modifier.fillMaxWidth()
+    if (isLandscape) {
+        Column(
+            modifier = modifier.padding(top = 20.dp)
         ) {
-            TextField(
-                modifier = modifier.width(100.dp),
-                value = inputText.value,
-                onValueChange = { inputText.value = it },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(
-                    capitalization = KeyboardCapitalization.None,
-                    autoCorrect = true,
-                    keyboardType = KeyboardType.Number
-                ),
-                colors = TextFieldDefaults.textFieldColors(
-                    containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.3F)
-                ),
-                textStyle = TextStyle(color = Color.DarkGray, fontSize = 30.sp)
-            )
-            Spacer(modifier = modifier.width(10.dp))
-            Text(
-                text = "Convert ${conversion.convertFrom} to ${conversion.convertTo}",
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = modifier
-                    .padding(start = 10.dp, top = 30.dp)
-                    .fillMaxWidth()
-            )
+            Row(
+            ) {
+                TextField(
+                    modifier = modifier.width(100.dp),
+                    value = inputText.value,
+                    onValueChange = { inputText.value = it },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(
+                        capitalization = KeyboardCapitalization.None,
+                        autoCorrect = true,
+                        keyboardType = KeyboardType.Number
+                    ),
+                    colors = TextFieldDefaults.textFieldColors(
+                        containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.3F)
+                    ),
+                    textStyle = TextStyle(color = Color.DarkGray, fontSize = 30.sp)
+                )
+                Spacer(modifier = modifier.width(10.dp))
+                Text(
+                    text = "Convert ${conversion.convertFrom} to ${conversion.convertTo}",
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = modifier
+                        .padding(start = 10.dp, top = 30.dp)
+                )
+            }
+            Spacer(modifier = modifier.height(20.dp))
+            OutlinedButton(
+                onClick = {
+                    if (inputText.value.isNotBlank()) {
+                        calculate(inputText.value)
+                    } else {
+                        Toast.makeText(context, "Enter value", Toast.LENGTH_SHORT).show()
+                    }
+                },
+                shape = RoundedCornerShape(5.dp)
+            ) {
+                Text(
+                    text = "Convert",
+                    fontSize = 36.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Blue
+                )
+            }
         }
-        Spacer(modifier = modifier.height(20.dp))
-        OutlinedButton(
-            onClick = {
-                if (inputText.value.isNotBlank()) {
-                    calculate(inputText.value)
-                } else {
-                    Toast.makeText(context, "Enter value", Toast.LENGTH_SHORT).show()
-                }
-            },
-            modifier = modifier.fillMaxWidth(1F),
-            shape = RoundedCornerShape(5.dp)
+    } else {
+        Column(
+            modifier = modifier.padding(top = 20.dp)
         ) {
-            Text(
-                text = "Convert",
-                fontSize = 36.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.Blue
-            )
+            Row(
+                modifier = modifier.fillMaxWidth()
+            ) {
+                TextField(
+                    modifier = modifier.width(100.dp),
+                    value = inputText.value,
+                    onValueChange = { inputText.value = it },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(
+                        capitalization = KeyboardCapitalization.None,
+                        autoCorrect = true,
+                        keyboardType = KeyboardType.Number
+                    ),
+                    colors = TextFieldDefaults.textFieldColors(
+                        containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.3F)
+                    ),
+                    textStyle = TextStyle(color = Color.DarkGray, fontSize = 30.sp)
+                )
+                Spacer(modifier = modifier.width(10.dp))
+                Text(
+                    text = "Convert ${conversion.convertFrom} to ${conversion.convertTo}",
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = modifier
+                        .padding(start = 10.dp, top = 30.dp)
+                        .fillMaxWidth()
+                )
+            }
+            Spacer(modifier = modifier.height(20.dp))
+            OutlinedButton(
+                onClick = {
+                    if (inputText.value.isNotBlank()) {
+                        calculate(inputText.value)
+                    } else {
+                        Toast.makeText(context, "Enter value", Toast.LENGTH_SHORT).show()
+                    }
+                },
+                modifier = modifier.fillMaxWidth(1F),
+                shape = RoundedCornerShape(5.dp)
+            ) {
+                Text(
+                    text = "Convert",
+                    fontSize = 36.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Blue
+                )
+            }
         }
     }
 }
